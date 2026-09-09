@@ -24,8 +24,8 @@
   --llanta-medio: #ffd400;
   --llanta-blando: #ff3b3b;
 
-  --fuente-display: 'Rajdhani', sans-serif;
-  --fuente-datos: 'Roboto Mono', monospace;
+  --fuente-display: 'Inter', sans-serif;
+  --fuente-datos: 'Inter', sans-serif;
 }
 
 * {
