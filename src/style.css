@@ -1,0 +1,82 @@
+/* ============================================================
+   ESTILOS GLOBALES
+   ------------------------------------------------------------
+   Paleta pensada como una pantalla de telemetria de boxes:
+     --negro-carbon   fondo principal
+     --gris-asfalto   paneles y tarjetas
+     --rojo-carrera   acento principal (alertas, boton, ranking 1)
+     --gris-acero     bordes, texto secundario
+     --blanco-humo    texto principal
+
+   Colores de compuesto de neumatico (uso informativo, no decorativo):
+     --llanta-duro, --llanta-medio, --llanta-blando
+   ============================================================ */
+
+:root {
+  --negro-carbon: #0b0c0e;
+  --gris-asfalto: #17191d;
+  --gris-panel: #1f2226;
+  --rojo-carrera: #e10600;
+  --gris-acero: #7a808a;
+  --blanco-humo: #ededee;
+
+  --llanta-duro: #e8e8e8;
+  --llanta-medio: #ffd400;
+  --llanta-blando: #ff3b3b;
+
+  --fuente-display: 'Rajdhani', sans-serif;
+  --fuente-datos: 'Roboto Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--negro-carbon);
+  color: var(--blanco-humo);
+  font-family: var(--fuente-datos);
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* Franja diagonal roja/negra al estilo de una bandera de carrera,
+   usada una sola vez como firma visual de la pagina. */
+.franja-carrera {
+  height: 6px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--rojo-carrera),
+    var(--rojo-carrera) 22px,
+    var(--negro-carbon) 22px,
+    var(--negro-carbon) 44px
+  );
+}
+
+button {
+  font-family: var(--fuente-display);
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Foco de teclado visible para accesibilidad */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--rojo-carrera);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
