@@ -5,7 +5,10 @@ import TablaResultados from './components/TablaResultados.vue'
 import TablaNormalizada from './components/TablaNormalizada.vue'
 import { alternativas as alternativasOriginales, criteriosBase } from './data/alternativas.js'
 import { calcularSAW } from './saw-calculo.js'
+import PantallaCarga from './components/PantallaCarga.vue'
 import logoF1 from './assets/logof1.png'
+import gifCheco from './assets/checo.gif'
+import gifPinguino from './assets/pinguinof1.gif'
 
 // Los criterios se guardan en una variable reactiva porque el
 // usuario va a escribir el peso de cada uno en el formulario.
@@ -32,6 +35,11 @@ const alternativasEditables = reactive(copiarAlternativas())
 const ordenActual = ref([])
 const calculado = ref(false)
 
+// Muestra la pantalla de carga (gif de Kimi) mientras dura el
+// "calculo" antes de que salga el ranking.
+const cargando = ref(false)
+let temporizadorCarga = null
+
 // Valores normalizados (0 a 1) del ultimo calculo, solo para
 // mostrarlos como referencia informativa en la tabla normalizada.
 const normalizados = ref([])
@@ -52,6 +60,18 @@ const filas = computed(() => {
 })
 
 function calcular() {
+  // Si ya hay un calculo en curso se ignora el clic para no
+  // amontonar temporizadores.
+  if (cargando.value) return
+
+  cargando.value = true
+  temporizadorCarga = setTimeout(() => {
+    ejecutarCalculo()
+    cargando.value = false
+  }, 2000)
+}
+
+function ejecutarCalculo() {
   const resultados = calcularSAW(alternativasEditables, criterios)
 
   // calcularSAW no modifica las alternativas originales, devuelve
@@ -130,9 +150,22 @@ function restablecerValores() {
       :resultados="normalizados"
       :criterios="criterios"
     />
+
+    <section class="gifs-diversion" aria-label="Gifs divertidos">
+      <figure class="gif-tarjeta">
+        <img :src="gifCheco" alt="Checo" class="gif-imagen" />
+        <figcaption class="gif-leyenda">Checo</figcaption>
+      </figure>
+      <figure class="gif-tarjeta">
+        <img :src="gifPinguino" alt="Pinguino F1" class="gif-imagen" />
+        <figcaption class="gif-leyenda">Pinguino F1</figcaption>
+      </figure>
+    </section>
   </main>
 
   <div class="franja-carrera"></div>
+
+  <PantallaCarga v-if="cargando" />
 </template>
 
 <style scoped>
@@ -167,6 +200,36 @@ function restablecerValores() {
   max-width: 1000px;
   margin: 0 auto;
   padding: 28px 32px 64px;
+}
+
+.gifs-diversion {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.gif-tarjeta {
+  margin: 0;
+  text-align: center;
+}
+
+.gif-imagen {
+  width: 160px;
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--gris-panel);
+  display: block;
+}
+
+.gif-leyenda {
+  font-family: var(--fuente-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--gris-acero);
+  margin-top: 8px;
 }
 
 @media (max-width: 640px) {
